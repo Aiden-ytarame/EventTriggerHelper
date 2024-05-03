@@ -11,7 +11,7 @@ namespace TriggerAPI.Patchers
     {
         [HarmonyPatch(nameof(GameManager2.Start))]
         [HarmonyPrefix]
-        static void StartTriggersPost()
+        static void StartTriggersPre()
         {
             if (Plugin.Inst.HasInitializedEvents)
                 return;
