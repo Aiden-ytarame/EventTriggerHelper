@@ -13,7 +13,7 @@ public class Plugin : BasePlugin
     public static Plugin Instance;
     public bool HasInitializedEvents = false;
     Harmony harmony;
-    const string Guid = "me.ytarame.TriggerAPI";
+    const string Guid = "me.ytarame.TriggerHelper";
     const string Name = "TriggerAPI";
     const string Version = "0.0.1";
 

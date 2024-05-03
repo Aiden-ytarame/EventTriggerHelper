@@ -15,7 +15,7 @@ namespace TriggerAPI
 /// <param name="customEvent">Pass in an instance of a class that inherits from the abstract class CustomEvent</param>
 /// <param name="eventData">The Event Data field names that show up in the Level Editor</param>
 /// <returns>Was successful</returns>
-/// <example>RegisterCustomEvent{ExampleLogEvent, new List{string}(){"Message to Log"});</example>
+/// <example>RegisterCustomEvent(new ExampleLogEvent(), new List{string}(){"Message to Log"});</example>
 /// </summary>
         public static bool RegisterCustomEvent(CustomEvent customEvent, List<string> eventData = null)
         {
@@ -39,13 +39,16 @@ namespace TriggerAPI
     public abstract class CustomEvent
     {
         /// <summary>
-        /// <para>The Name of your Event is the name of the Enum entry.</para>
+        /// <para>The Name of your Event, it's also the name of the Enum entry.</para>
         /// The name Should follow Enum naming rules, such as no spaces or not starting with a number
         /// <example> Spawn_Prefab </example>
         /// </summary>
         public abstract string EventName { get; }
         
+        ///<summary>
+        /// The function called when the event is Triggered.
         /// <param name="data"> The data defined by the user in the level editor</param>
+        /// </summary>
         public abstract void EventTriggered(Il2CppSystem.Collections.Generic.List<string> data);
     }
 
