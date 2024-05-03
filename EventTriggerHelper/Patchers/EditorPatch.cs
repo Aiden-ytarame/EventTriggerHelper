@@ -45,7 +45,7 @@ namespace TriggerAPI.Patchers
                     int index = Il2CppType.Of<EventType>().GetEnumNames()
                         .IndexOf(eventTriggersTrigger.EventData[0]);
 
-                    //if custom trigger is not registered, default to LogEvent.
+                    //if custom event is not found, default to LogEvent.
                     eventTriggersTrigger.EventType = index != -1 ? (EventType)index : (EventType)5;
  
                     eventTriggersTrigger.EventData.RemoveAt(0);
