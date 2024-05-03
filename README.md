@@ -10,6 +10,8 @@ If you're using a mod that makes a new event that doesnt use this mod, it might 
 
 Its meant to be used with BepInEx 6.0.0 il2cpp bleeding Edge build, tho I didnt test if the non bleeding edge build works.
 
+(The mod is called trigger helper and yet has 0 support for custom triggers, just events. bruh)
+
 ## **Instalation**
 **(WIP)**
 
