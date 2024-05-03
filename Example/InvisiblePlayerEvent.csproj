@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>TriggerAPI</AssemblyName>
-    <Description>API to ease work with triggers</Description>
+    <AssemblyName>InvisiblePlayerEvent</AssemblyName>
+    <Description>Example Custom Event</Description>
     <Version>1.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
@@ -12,7 +12,7 @@
       https://nuget.bepinex.dev/v3/index.json;
       https://nuget.samboy.dev/v3/index.json;
     </RestoreAdditionalProjectSources>
-    <RootNamespace>TriggerAPI</RootNamespace>
+    <RootNamespace>InvisiblePlayer</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,26 +28,11 @@
     <Reference Include="Il2Cppmscorlib">
       <HintPath>lib\Il2Cppmscorlib.dll</HintPath>
     </Reference>
-    <Reference Include="Rewired_Core">
-      <HintPath>lib\Rewired_Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Localization">
-      <HintPath>lib\Unity.Localization.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>lib\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>lib\UnityEngine.AssetBundleModule.dll</HintPath>
+    <Reference Include="TriggerAPI">
+      <HintPath>lib\TriggerAPI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>lib\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Physics2DModule">
-      <HintPath>lib\UnityEngine.Physics2DModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>lib\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

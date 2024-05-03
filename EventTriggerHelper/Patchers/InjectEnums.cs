@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using Cpp2IL.Core.Extensions;
 using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
-using TriggersAPI;
 using static DataManager.GameData.BeatmapData.EventTriggers;
 
 namespace TriggerAPI.Patchers
@@ -15,12 +13,12 @@ namespace TriggerAPI.Patchers
         [HarmonyPrefix]
         static void StartTriggersPost()
         {
-            if (Plugin.Instance.HasInitializedEvents)
+            if (Plugin.Inst.HasInitializedEvents)
                 return;
 
-            Plugin.Instance.HasInitializedEvents = true;
+            Plugin.Inst.HasInitializedEvents = true;
 
-            Plugin.Instance.Log.LogWarning("STARTED GM2");
+            Plugin.Inst.Log.LogWarning("STARTED GM2");
 
             Dictionary<string, object> newEvents = new Dictionary<string, object>();
             if (RegisterTriggerEvents.ModdedEvents.Count == 0)
@@ -44,7 +42,7 @@ namespace TriggerAPI.Patchers
         [HarmonyPrefix]
         public static bool StartTriggersPost(ref GameManager2 __instance, ref Trigger _trigger)
         {
-            if ((int)_trigger.EventType < 5)
+            if ((int)_trigger.EventType < Plugin.Inst.DefaultEventsCount)
                 return true;
             
             if (_trigger.EventTriggerRetrigger != -1)
@@ -60,7 +58,7 @@ namespace TriggerAPI.Patchers
                     __instance.hasTriggered.Add(_trigger.ID, 1);
             }
 
-            Plugin.Instance.Log.LogInfo($"Custom Event Triggered: {Il2CppType.Of<EventType>().GetEnumNames()[(int)_trigger.EventType]}"); 
+            Plugin.Inst.Log.LogInfo($"Custom Event Triggered: {Il2CppType.Of<EventType>().GetEnumNames()[(int)_trigger.EventType]}"); 
             
             if(RegisterTriggerEvents.ModdedEvents.TryGetValue(Il2CppType.Of<EventType>().GetEnumNames()[(int)_trigger.EventType], out CustomEvent customEvent))
             {
@@ -68,7 +66,7 @@ namespace TriggerAPI.Patchers
             }
             else
             {
-                Plugin.Instance.Log.LogError("Invalid Custom Event!");
+                Plugin.Inst.Log.LogError("Invalid Custom Event!");
             }
 
             return false;

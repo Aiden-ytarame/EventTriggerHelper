@@ -1,6 +1,5 @@
 using HarmonyLib;
 using Il2CppInterop.Runtime;
-using TriggersAPI;
 using static DataManager.GameData.BeatmapData.EventTriggers;
 
 namespace TriggerAPI.Patchers
@@ -21,7 +20,7 @@ namespace TriggerAPI.Patchers
                 {
                     newData.Add(x);
                 }); //is there a way to cast System List to Il2cppSystem List?
-
+                
                 DataManager.inst.gameData.beatmapData.eventTriggers.EventTypeData.TryAdd(
                     (EventType)Il2CppType.Of<EventType>().GetEnumNames().IndexOf(keyValuePair.Key), newData);
             }
@@ -37,7 +36,7 @@ namespace TriggerAPI.Patchers
         {
             foreach (var eventTriggersTrigger in DataManager.inst.gameData.beatmapData.eventTriggers.triggers)
             {
-                if ((int)eventTriggersTrigger.EventType > 4)
+                if ((int)eventTriggersTrigger.EventType >= Plugin.Inst.DefaultEventsCount)
                 {
                     //if you download multiple events mods this ensures it has the right enum id.
                     if (eventTriggersTrigger.EventData.Count == 0)

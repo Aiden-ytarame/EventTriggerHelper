@@ -1,6 +1,5 @@
 using HarmonyLib;
 using Il2CppInterop.Runtime;
-using TriggersAPI;
 using static DataManager.GameData.BeatmapData.EventTriggers;
 
 namespace TriggerAPI.Patchers
@@ -15,9 +14,9 @@ namespace TriggerAPI.Patchers
         {
             foreach (var dataEntry in DataManager.inst.gameData.beatmapData.eventTriggers.triggers)
             {
-                if ((int)dataEntry.EventType > 4)
+                if ((int)dataEntry.EventType >= Plugin.Inst.DefaultEventsCount)
                 {
-                    Plugin.Instance.Log.LogError(
+                    Plugin.Inst.Log.LogError(
                         $"Saving Event Type: {Il2CppType.Of<EventType>().GetEnumNames()[(int)dataEntry.EventType]}");
                     dataEntry.EventData.Insert(0, Il2CppType.Of<EventType>().GetEnumNames()[(int)dataEntry.EventType]);
                 }
@@ -34,7 +33,7 @@ namespace TriggerAPI.Patchers
         {
             foreach (var dataEntry in  DataManager.inst.gameData.beatmapData.eventTriggers.triggers)
             {
-                if ((int)dataEntry.EventType > 4)
+                if ((int)dataEntry.EventType >= Plugin.Inst.DefaultEventsCount)
                 {
                     dataEntry.EventData.RemoveAt(0);
                 }
