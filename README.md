@@ -72,7 +72,7 @@ To register your custom Trigger, call **TriggerAPI.RegisterTriggerEvents.Registe
 
 Example: RegisterCustomTrigger("Player_Moved");
 
-**Note:** The name of your Trigegr, is also the the Enum entry. Because of that, the name should follow the rules of naming variables, such as no spaces or not starting with a number.
+**Note:** The name of your Trigger, is also the the Enum entry. Because of that, the name should follow the rules of naming variables, such as no spaces or not starting with a number.
 
 
 ## Usage
