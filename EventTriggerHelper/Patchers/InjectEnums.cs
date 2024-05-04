@@ -77,7 +77,7 @@ namespace TriggerAPI.Patchers
             if(RegisterTriggerEvents.ModdedEvents.TryGetValue(Il2CppType.Of<EventType>().GetEnumNames()[(int)_trigger.EventType], out CustomEvent customEvent))
             {
                 customEvent.EventTriggered(_trigger.EventData);
-            }
+            } 
             else
             {
                 Plugin.Inst.Log.LogError("Invalid Custom Event!");

@@ -16,20 +16,15 @@ namespace TriggerAPI.Patchers
             {
                 if ((int)dataEntry.EventType >= Plugin.Inst.DefaultEventsCount)
                 {
-                    if ((int)dataEntry.EventTrigger < Plugin.Inst.DefaultTriggersCount)
-                    {
-                        dataEntry.EventData.Insert(0, "DefaultTrigger");
-                    }
-                    else
-                    {
-                        dataEntry.EventData.Insert(0, Il2CppType.Of<TriggerType>().GetEnumNames()[(int)dataEntry.EventTrigger]);
-                    }
-                    
-                    dataEntry.EventData.Insert(0, Il2CppType.Of<EventType>().GetEnumNames()[(int)dataEntry.EventType]);
+                    dataEntry.EventData.Insert(0, $"(CustomEvent){Il2CppType.Of<EventType>().GetEnumNames()[(int)dataEntry.EventType]}");
+                }
+                if ((int)dataEntry.EventTrigger >= Plugin.Inst.DefaultTriggersCount)
+                {
+                    dataEntry.EventData.Insert(0, $"(CustomTrigger){Il2CppType.Of<TriggerType>().GetEnumNames()[(int)dataEntry.EventTrigger]}");
                 }
             }
         }
-    }
+}
     [HarmonyPatch(typeof(DataManager._SaveDataNew_d__113))]
     internal class SaveEventTypeCoroutine
     {
@@ -40,9 +35,14 @@ namespace TriggerAPI.Patchers
         {
             foreach (var dataEntry in  DataManager.inst.gameData.beatmapData.eventTriggers.triggers)
             {
+                if ((int)dataEntry.EventTrigger >= Plugin.Inst.DefaultTriggersCount)
+                {
+                    dataEntry.EventData.RemoveAt(0);
+                }
+
                 if ((int)dataEntry.EventType >= Plugin.Inst.DefaultEventsCount)
                 {
-                    dataEntry.EventData.RemoveRange(0,2);
+                    dataEntry.EventData.RemoveAt(0);
                 }
             }
         }

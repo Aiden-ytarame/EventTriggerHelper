@@ -36,20 +36,33 @@ namespace TriggerAPI.Patchers
         {
             foreach (var trigger in DataManager.inst.gameData.beatmapData.eventTriggers.triggers)
             {
-                if ((int)trigger.EventType >= Plugin.Inst.DefaultEventsCount)
+                //if you download multiple events mods this ensures it has the right enum id.
+                if (trigger.EventData.Count == 0)
+                    return;
+
+                if (trigger.EventData[0].Contains("(CustomTrigger)"))
                 {
-                    //if you download multiple events mods this ensures it has the right enum id.
-                    if (trigger.EventData.Count < 2)
-                        return;
-
-                    int triggerIndex = RegisterTriggerEvents.GetTriggerEnumFromName(trigger.EventData[0]);
+                    Plugin.Inst.Log.LogError(trigger.EventData[0].Substring(15));
+                    int triggerIndex = RegisterTriggerEvents.GetEventEnumFromName(trigger.EventData[0].Substring(15));
                     
-                    int eventIndex = RegisterTriggerEvents.GetEventEnumFromName(trigger.EventData[1]);
-                   
-                    trigger.EventTrigger = triggerIndex != -1 ? (TriggerType)triggerIndex : TriggerType.Time; //if custom trigger is not registered, default to Time
-                    trigger.EventType = eventIndex != -1 ? (EventType)eventIndex : (EventType)5; //if custom event is not registered, default to LogEvent.
-
-                    trigger.EventData.RemoveRange(0,2);
+                    trigger.EventTrigger =
+                        triggerIndex != -1
+                            ? (TriggerType)triggerIndex
+                            : TriggerType.Time; //if custom trigger is not registered, default to Time
+                    
+                    trigger.EventData.RemoveAt(0);
+                }
+                if (trigger.EventData[0].Contains("(CustomEvent)"))
+                {
+                    Plugin.Inst.Log.LogError(trigger.EventData[0].Substring(13));
+                    int eventIndex = RegisterTriggerEvents.GetEventEnumFromName(trigger.EventData[0].Substring(13));
+                    
+                    trigger.EventType =
+                        eventIndex != -1
+                            ? (EventType)eventIndex
+                            : (EventType)5; //if custom event is not registered, default to LogEvent.
+                    
+                    trigger.EventData.RemoveAt(0);
                 }
             }
         }
