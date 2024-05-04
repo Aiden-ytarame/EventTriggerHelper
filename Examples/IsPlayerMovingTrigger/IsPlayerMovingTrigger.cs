@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using HarmonyLib;
-using UnityEngine;
 using static DataManager.GameData.BeatmapData.EventTriggers;
-namespace InvisblePlayerEvent;
+
+namespace MovingTrigger;
 
 
 [HarmonyPatch(typeof(VGPlayer))]

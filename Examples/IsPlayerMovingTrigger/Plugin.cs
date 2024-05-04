@@ -2,7 +2,7 @@
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 
-namespace InvisblePlayerEvent;
+namespace MovingTrigger;
 
 [BepInPlugin(Guid, Name, Version)]
 [BepInProcess("Project Arrhythmia.exe")]
