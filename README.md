@@ -28,7 +28,7 @@ Set this plugin as a dependency in your plugin with:
 
 
 
-### Making a new event
+### Making a new Event
 
  Make a new Class Inheriting from the abstract class CustomEvent, and implement it.
 
@@ -50,6 +50,14 @@ To register your custom Event call TriggerAPI.RegisterTriggerEvents.RegisterCust
 *  **eventData:** Its the Event Data field names that show up in the Level Editor.
   
 Example: RegisterCustomEvent(new ExampleLogEvent(), new List{string}(){"Message to Log"});
+
+### Making a new Trigger
+
+Triggers work by calling GameManager2.CallEvent(Trigger) when they want to. the function is called for every trigger using 
+
+In the example "Player_Moved" it calls the function CallEvent when a player just started moving. 
+
+### Registering a new Trigger
 
 ## Usage
 
