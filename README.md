@@ -2,7 +2,7 @@
 
 **Work In Progress**
 
-A mod used to facilitate making new Custom Events, and using them with other Custom Events mods.
+A mod used to facilitate making new Custom Events and Triggers. Also to use them with other Custom Events/Trigger mods.
 
 The main point of this is to make sure there isnt any problems when using multiple mods that add new events.
 
@@ -10,7 +10,8 @@ If you're using a mod that makes a new event that doesnt use this mod, it might 
 
 Its meant to be used with BepInEx 6.0.0 il2cpp bleeding Edge build, tho I didnt test if the non bleeding edge build works.
 
-(The mod is called trigger helper and yet has 0 support for custom triggers, just events. bruh)
+I dont think anyone will ever use this tbh
+
 
 ## **Instalation**
 **(WIP)**
@@ -42,7 +43,7 @@ Example: Spawn_Prefab
 
 ### Registering a new CustomEvent
 
-To register your custom Event call TriggerAPI.RegisterTriggerEvents.RegisterCustomEvent() from your Plugin.Load() function.
+To register your custom Event call, **TriggerAPI.RegisterTriggerEvents.RegisterCustomEvent()** from your **Plugin.Load()** function.
 
 #### Params
 
@@ -53,11 +54,24 @@ Example: RegisterCustomEvent(new ExampleLogEvent(), new List{string}(){"Message 
 
 ### Making a new Trigger
 
-Triggers work by calling GameManager2.CallEvent(Trigger) when they want to. the function is called for every trigger using 
+Triggers work by calling GameManager2.CallEvent(Trigger) pretty much when they want to. the function is called for every trigger using the TriggerType of the custom trigger.
 
-In the example "Player_Moved" it calls the function CallEvent when a player just started moving. 
+examples:
+
+* Player_Hit trigger binds a lambda(?) of each trigger that uses the EventType Player_Hit to the PlayerHitDelegate of every player. When that delegate is fired, it calls the lambda of every Trigger, that lambda calls GameManager2.CallEvent(Trigger).
+  
+* Player_Moved CustomTrigger (check IsPlayerMovingTrigger.cs in examples folder) checks every frame for the players velocity. If the velocity just got out of zero it goes trough a list of TriggerEvents that use the Player_Moved trigger and calls GameManager2.CallEvent(Trigger) for each one.
+
+  you get the idea.
+
 
 ### Registering a new Trigger
+You register your triggers so it shows up in the level editor and gets saved.
+
+To register your custom Trigger, call **TriggerAPI.RegisterTriggerEvents.RegisterCustomTrigger(NameOfYourTrigger)** from your **Plugin.Load()** function.
+
+Example: RegisterCustomTrigger("Player_Moved");
+
 
 ## Usage
 
