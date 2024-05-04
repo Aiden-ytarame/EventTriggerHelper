@@ -16,8 +16,15 @@ namespace TriggerAPI.Patchers
             {
                 if ((int)dataEntry.EventType >= Plugin.Inst.DefaultEventsCount)
                 {
-                    Plugin.Inst.Log.LogError(
-                        $"Saving Event Type: {Il2CppType.Of<EventType>().GetEnumNames()[(int)dataEntry.EventType]}");
+                    if ((int)dataEntry.EventTrigger < Plugin.Inst.DefaultTriggersCount)
+                    {
+                        dataEntry.EventData.Insert(0, "DefaultTrigger");
+                    }
+                    else
+                    {
+                        dataEntry.EventData.Insert(0, Il2CppType.Of<TriggerType>().GetEnumNames()[(int)dataEntry.EventTrigger]);
+                    }
+                    
                     dataEntry.EventData.Insert(0, Il2CppType.Of<EventType>().GetEnumNames()[(int)dataEntry.EventType]);
                 }
             }
@@ -35,7 +42,7 @@ namespace TriggerAPI.Patchers
             {
                 if ((int)dataEntry.EventType >= Plugin.Inst.DefaultEventsCount)
                 {
-                    dataEntry.EventData.RemoveAt(0);
+                    dataEntry.EventData.RemoveRange(0,2);
                 }
             }
         }

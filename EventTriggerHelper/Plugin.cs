@@ -13,6 +13,7 @@ public class Plugin : BasePlugin
     public static Plugin Inst;
     internal bool HasInitializedEvents = false;
     public int DefaultEventsCount { get; private set; }
+    public int DefaultTriggersCount { get; private set; }
     
     Harmony _harmony;
     const string Guid = "me.ytarame.TriggerHelper";
@@ -24,6 +25,8 @@ public class Plugin : BasePlugin
     {     
         RegisterTriggerEvents.RegisterCustomEvent(new LogCustomEvent(), new List<string>(){"Messages to Log"});
         DefaultEventsCount = Enum.GetValues<DataManager.GameData.BeatmapData.EventTriggers.EventType>().Length;
+        DefaultTriggersCount = Enum.GetValues<DataManager.GameData.BeatmapData.EventTriggers.TriggerType>().Length;
+        
         Inst = this;
         _harmony = new Harmony(Guid);
         _harmony.PatchAll();

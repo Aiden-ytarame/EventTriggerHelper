@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Il2CppInterop.Runtime;
 
 namespace TriggerAPI
 {
@@ -10,6 +11,8 @@ namespace TriggerAPI
     {
         internal static Dictionary<string, CustomEvent> ModdedEvents { get; private set; }
         internal static Dictionary<string, List<string>> EventsData{ get; private set; }
+        internal static List<string> ModdedTriggers{ get; private set; }
+        
 
 /// <summary>
 /// <param name="customEvent">Pass in an instance of a class that inherits from the abstract class CustomEvent</param>
@@ -31,6 +34,38 @@ namespace TriggerAPI
                 EventsData.TryAdd(customEvent.EventName, new(){"Misc Data Field"});
             
             return ModdedEvents.TryAdd(customEvent.EventName, customEvent);
+        }
+
+        /// <summary>
+        /// <param name="triggerName">The Name of your trigger. please follow variable naming rules, such as no spaces and not starting with a number</param>
+        /// <returns>Was successful</returns>
+        /// <example>RegisterCustomTrigger("Dodged_Hit");</example>
+        /// </summary>
+        public static bool RegisterCustomTrigger(string triggerName)
+        {
+            if (ModdedTriggers == null)
+            {
+                ModdedTriggers = new List<string>();
+            }
+
+            if (ModdedTriggers.Contains(triggerName))
+            {
+                Plugin.Inst.Log.LogError($"Trigger [{triggerName}] already exists!");
+                return false;
+            }
+            ModdedTriggers.Add(triggerName);
+            return true;
+        }
+
+        public static int GetTriggerEnumFromName(string triggerName)
+        {
+            return Il2CppType.Of<DataManager.GameData.BeatmapData.EventTriggers.TriggerType>().GetEnumNames()
+                .IndexOf(triggerName);
+        }
+        public static int GetEventEnumFromName(string eventName)
+        {
+            return Il2CppType.Of<DataManager.GameData.BeatmapData.EventTriggers.EventType>().GetEnumNames()
+                .IndexOf(eventName);
         }
     }
     /// <summary>

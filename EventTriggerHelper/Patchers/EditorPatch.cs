@@ -34,21 +34,23 @@ namespace TriggerAPI.Patchers
         [HarmonyPrefix]
         public static void PrePlay()
         {
-            foreach (var eventTriggersTrigger in DataManager.inst.gameData.beatmapData.eventTriggers.triggers)
+            foreach (var trigger in DataManager.inst.gameData.beatmapData.eventTriggers.triggers)
             {
-                if ((int)eventTriggersTrigger.EventType >= Plugin.Inst.DefaultEventsCount)
+                if ((int)trigger.EventType >= Plugin.Inst.DefaultEventsCount)
                 {
                     //if you download multiple events mods this ensures it has the right enum id.
-                    if (eventTriggersTrigger.EventData.Count == 0)
+                    if (trigger.EventData.Count < 2)
                         return;
 
-                    int index = Il2CppType.Of<EventType>().GetEnumNames()
-                        .IndexOf(eventTriggersTrigger.EventData[0]);
+                    int triggerIndex = RegisterTriggerEvents.GetTriggerEnumFromName(trigger.EventData[0]);
+                    
+                    int eventIndex = RegisterTriggerEvents.GetEventEnumFromName(trigger.EventData[1]);
 
-                    //if custom trigger is not registered, default to LogEvent.
-                    eventTriggersTrigger.EventType = index != -1 ? (EventType)index : (EventType)5;
+                   
+                    trigger.EventTrigger = triggerIndex != -1 ? (TriggerType)triggerIndex : TriggerType.Time; //if custom trigger is not registered, default to Time
+                    trigger.EventType = eventIndex != -1 ? (EventType)eventIndex : (EventType)5; //if custom event is not registered, default to LogEvent.
  
-                    eventTriggersTrigger.EventData.RemoveAt(0);
+                    trigger.EventData.RemoveRange(0,2);
                 }
             }
         }

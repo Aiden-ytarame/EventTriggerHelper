@@ -18,29 +18,43 @@ namespace TriggerAPI.Patchers
 
             Plugin.Inst.HasInitializedEvents = true;
 
-            Plugin.Inst.Log.LogWarning("STARTED GM2");
-
             Dictionary<string, object> newEvents = new Dictionary<string, object>();
-            if (RegisterTriggerEvents.ModdedEvents.Count == 0)
-                return;
-            
-            var Enu = RegisterTriggerEvents.ModdedEvents.GetEnumerator();
-            while (Enu.MoveNext())
-            {
-                newEvents.Add(Enu.Current.Value.EventName, 7);
-            }
-            Enu.Dispose();
+            Dictionary<string, object> newTriggers = new Dictionary<string, object>();
 
-            EnumInjector.InjectEnumValues(typeof(EventType), newEvents);
+            if (RegisterTriggerEvents.ModdedEvents.Count != 0)
+            {
+                var Enu = RegisterTriggerEvents.ModdedEvents.GetEnumerator();
+                while (Enu.MoveNext())
+                {
+                    newEvents.Add(Enu.Current.Value.EventName, Plugin.Inst.DefaultEventsCount);
+                }
+
+                Enu.Dispose();
+                
+                EnumInjector.InjectEnumValues(typeof(EventType), newEvents);
+            }
+            if (RegisterTriggerEvents.ModdedTriggers.Count != 0)
+            {
+                var Enu = RegisterTriggerEvents.ModdedTriggers.GetEnumerator();
+                while (Enu.MoveNext())
+                {
+                    newTriggers.Add(Enu.Current, Plugin.Inst.DefaultTriggersCount + 1); // for some reason +1 has to be here but not on events??
+                }
+                Enu.Dispose();
+                
+                EnumInjector.InjectEnumValues(typeof(TriggerType), newTriggers);
+            }
         }
     } 
     
+    //so ideally we override EventTriggered, but the data parameter gives an exception when you try to access it for some reason.
+    //so CallEvent is the way
     [HarmonyPatch(typeof(GameManager2))]
     internal class TriggerCustomEvent
     {
         [HarmonyPatch(nameof(GameManager2.CallEventRaw))]
         [HarmonyPrefix]
-        public static bool StartTriggersPost(ref GameManager2 __instance, ref Trigger _trigger)
+        public static bool CallRawPre(ref GameManager2 __instance, ref Trigger _trigger)
         {
             if ((int)_trigger.EventType < Plugin.Inst.DefaultEventsCount)
                 return true;
@@ -68,6 +82,25 @@ namespace TriggerAPI.Patchers
             {
                 Plugin.Inst.Log.LogError("Invalid Custom Event!");
             }
+
+            return false;
+        }
+        [HarmonyPatch(nameof(GameManager2.CallEvent))]
+        [HarmonyPrefix]
+        public static bool CallPre(ref GameManager2 __instance, ref Trigger _trigger)
+        {
+            
+            float startTime = _trigger.EventTriggerTime.x;
+            float endTime = _trigger.EventTriggerTime.y;
+
+            // make it so you can have start and end values 
+            if (startTime == -1) startTime = 0;
+            if (endTime == -1) endTime = 6000;
+
+            // skip if not in time range
+            if (__instance.CurrentSongTimeSmoothed < startTime || __instance.CurrentSongTimeSmoothed > endTime) return false;
+
+            __instance.CallEventRaw(_trigger);
 
             return false;
         }
