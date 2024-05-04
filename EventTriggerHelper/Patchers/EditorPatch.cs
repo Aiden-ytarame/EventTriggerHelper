@@ -45,11 +45,10 @@ namespace TriggerAPI.Patchers
                     int triggerIndex = RegisterTriggerEvents.GetTriggerEnumFromName(trigger.EventData[0]);
                     
                     int eventIndex = RegisterTriggerEvents.GetEventEnumFromName(trigger.EventData[1]);
-
                    
                     trigger.EventTrigger = triggerIndex != -1 ? (TriggerType)triggerIndex : TriggerType.Time; //if custom trigger is not registered, default to Time
                     trigger.EventType = eventIndex != -1 ? (EventType)eventIndex : (EventType)5; //if custom event is not registered, default to LogEvent.
- 
+
                     trigger.EventData.RemoveRange(0,2);
                 }
             }
