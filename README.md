@@ -33,11 +33,11 @@ Set this plugin as a dependency in your plugin with:
 
  Make a new Class Inheriting from the abstract class CustomEvent, and implement it.
 
-**EventName:** Its Name of your Event, it's also the the Enum entry. Because of that, the name should follow the rules of naming variables, such as no spaces or not starting with a number
+**EventName:** Its Name of your Event, it's also the the Enum entry. Because of that, the name should follow the rules of naming variables, such as no spaces or not starting with a number.
 
 Example: Spawn_Prefab 
 
-**EventTriggered(List<string> data):** Is the function called when the event is triggered. The Param [data] is the data defined by the user in the level editor
+**EventTriggered(List<string> data):** Is the function called when the event is triggered. The Param [data] is the data defined by the user in the level editor.
 
 
 
@@ -71,6 +71,8 @@ You register your triggers so it shows up in the level editor and gets saved.
 To register your custom Trigger, call **TriggerAPI.RegisterTriggerEvents.RegisterCustomTrigger(NameOfYourTrigger)** from your **Plugin.Load()** function.
 
 Example: RegisterCustomTrigger("Player_Moved");
+
+**Note:** The name of your Trigegr, is also the the Enum entry. Because of that, the name should follow the rules of naming variables, such as no spaces or not starting with a number.
 
 
 ## Usage
