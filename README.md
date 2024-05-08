@@ -56,13 +56,9 @@ Example: RegisterCustomEvent(new ExampleLogEvent(), new List{string}(){"Message 
 
 Triggers work by calling GameManager2.CallEvent(Trigger) pretty much when they want to. the function is called for every trigger using the TriggerType of the custom trigger.
 
-examples:
+example:
 
-* Player_Hit trigger binds a lambda(?) of each trigger that uses the EventType Player_Hit to the PlayerHitDelegate of every player. When that delegate is fired, it calls the lambda of every Trigger, that lambda calls GameManager2.CallEvent(Trigger).
-  
 * Player_Moved CustomTrigger (check IsPlayerMovingTrigger.cs in examples folder) checks every frame for the players velocity. If the velocity just got out of zero it goes trough a list of TriggerEvents that use the Player_Moved trigger and calls GameManager2.CallEvent(Trigger) for each one.
-
-  you get the idea.
 
 
 ### Registering a new Trigger
