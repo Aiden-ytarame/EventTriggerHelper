@@ -53,6 +53,7 @@ namespace TriggerAPI
                 Plugin.Inst.Log.LogError($"Trigger [{triggerName}] already exists!");
                 return false;
             }
+            
             ModdedTriggers.Add(triggerName);
             return true;
         }

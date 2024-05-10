@@ -6,10 +6,10 @@ using static DataManager.GameData.BeatmapData.EventTriggers;
 
 namespace TriggerAPI.Patchers
 {
-    [HarmonyPatch(typeof(GameManager2))]
+    [HarmonyPatch(typeof(GameManager))]
     internal class StartTriggers
     {
-        [HarmonyPatch(nameof(GameManager2.Start))]
+        [HarmonyPatch(nameof(GameManager.Start))]
         [HarmonyPrefix]
         static void StartTriggersPre()
         {
@@ -49,12 +49,12 @@ namespace TriggerAPI.Patchers
     
     //so ideally we override EventTriggered, but the data parameter gives an exception when you try to access it for some reason.
     //so CallEvent is the way
-    [HarmonyPatch(typeof(GameManager2))]
+    [HarmonyPatch(typeof(GameManager))]
     internal class TriggerCustomEvent
     {
-        [HarmonyPatch(nameof(GameManager2.CallEventRaw))]
+        [HarmonyPatch(nameof(GameManager.CallEventRaw))]
         [HarmonyPrefix]
-        public static bool CallRawPre(ref GameManager2 __instance, ref Trigger _trigger)
+        public static bool CallRawPre(ref GameManager __instance, ref Trigger _trigger)
         {
             if ((int)_trigger.EventType < Plugin.Inst.DefaultEventsCount)
                 return true;
@@ -70,6 +70,9 @@ namespace TriggerAPI.Patchers
                 // setup triggered state
                 else
                     __instance.hasTriggered.Add(_trigger.ID, 1);
+                
+                AudioManager.Inst.Start();
+                AudioManager.inst.Start();
             }
 
             Plugin.Inst.Log.LogInfo($"Custom Event Triggered: {Il2CppType.Of<EventType>().GetEnumNames()[(int)_trigger.EventType]}"); 
@@ -85,9 +88,9 @@ namespace TriggerAPI.Patchers
 
             return false;
         }
-        [HarmonyPatch(nameof(GameManager2.CallEvent))]
+        [HarmonyPatch(nameof(GameManager.CallEvent))]
         [HarmonyPrefix]
-        public static bool CallPre(ref GameManager2 __instance, ref Trigger _trigger)
+        public static bool CallPre(ref GameManager __instance, ref Trigger _trigger)
         {
             
             float startTime = _trigger.EventTriggerTime.x;

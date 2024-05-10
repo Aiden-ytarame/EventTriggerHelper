@@ -44,7 +44,7 @@ public class VGPlayer_Patch
         
         foreach (var trigger in _movedTriggers)
         {
-            GameManager2.inst.CallEvent(trigger);
+            GameManager.inst.CallEvent(trigger);
             HasTriggeredMoved[inst.PlayerID] = true;
             HasTriggeredStopped[inst.PlayerID] = false;
         }
@@ -57,7 +57,7 @@ public class VGPlayer_Patch
 
         foreach (var trigger in _stoppedTriggers)
         {
-            GameManager2.inst.CallEvent(trigger);
+            GameManager.inst.CallEvent(trigger);
             HasTriggeredStopped[inst.PlayerID] = true;
             HasTriggeredMoved[inst.PlayerID] = false;
         }
@@ -65,12 +65,12 @@ public class VGPlayer_Patch
 }
 
 
-[HarmonyPatch(typeof(GameManager2))]
-public class GameManager2_Patch
+[HarmonyPatch(typeof(GameManager))]
+public class GameManager_Patch
 {
-    [HarmonyPatch(nameof(GameManager2.SetupPlayerEventTriggers))]
+    [HarmonyPatch(nameof(GameManager.SetupPlayerEventTriggers))]
     [HarmonyPostfix]
-    static void PostStart(ref GameManager2 __instance)
+    static void PostStart(ref GameManager __instance)
     {
         VGPlayer_Patch._movedTriggers.Clear();
         VGPlayer_Patch._stoppedTriggers.Clear();

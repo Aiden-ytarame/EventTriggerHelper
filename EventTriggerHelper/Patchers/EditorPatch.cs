@@ -27,10 +27,10 @@ namespace TriggerAPI.Patchers
         }
     }
 
-    [HarmonyPatch(typeof(GameManager2))]
+    [HarmonyPatch(typeof(GameManager))]
     internal class SetupEventTypes
     {
-        [HarmonyPatch(nameof(GameManager2.PlayGame))]
+        [HarmonyPatch(nameof(GameManager.PlayGame))]
         [HarmonyPrefix]
         public static void PrePlay()
         {
