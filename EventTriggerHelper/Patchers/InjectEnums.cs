@@ -2,6 +2,7 @@
 using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
+using Il2CppSystem;
 using static DataManager.GameData.BeatmapData.EventTriggers;
 
 namespace TriggerAPI.Patchers
@@ -26,28 +27,31 @@ namespace TriggerAPI.Patchers
                 var Enu = RegisterTriggerEvents.ModdedEvents.GetEnumerator();
                 while (Enu.MoveNext())
                 {
-                    newEvents.Add(Enu.Current.Value.EventName, Plugin.Inst.DefaultEventsCount);
+                    newEvents.Add(Enu.Current.Value.EventName, 99);
                 }
 
                 Enu.Dispose();
-                
+
                 EnumInjector.InjectEnumValues(typeof(EventType), newEvents);
             }
+
             if (RegisterTriggerEvents.ModdedTriggers.Count != 0)
             {
                 var Enu = RegisterTriggerEvents.ModdedTriggers.GetEnumerator();
                 while (Enu.MoveNext())
                 {
-                    newTriggers.Add(Enu.Current, Plugin.Inst.DefaultTriggersCount + 1); // for some reason +1 has to be here but not on events??
+                    newTriggers.Add(Enu.Current, 99);
                 }
+
                 Enu.Dispose();
-                
+
                 EnumInjector.InjectEnumValues(typeof(TriggerType), newTriggers);
             }
         }
-    } 
-    
-    //so ideally we override EventTriggered, but the data parameter gives an exception when you try to access it for some reason.
+    }
+
+
+//so ideally we override EventTriggered, but the data parameter gives an exception when you try to access it for some reason.
     //so CallEvent is the way
     [HarmonyPatch(typeof(GameManager))]
     internal class TriggerCustomEvent

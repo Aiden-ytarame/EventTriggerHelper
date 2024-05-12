@@ -60,7 +60,7 @@ namespace TriggerAPI.Patchers
                     trigger.EventType =
                         eventIndex != -1
                             ? (EventType)eventIndex
-                            : (EventType)5; //if custom event is not registered, default to LogEvent.
+                            : (EventType)Plugin.Inst.DefaultEventsCount; //if custom event is not registered, default to LogEvent.
                     
                     trigger.EventData.RemoveAt(0);
                 }

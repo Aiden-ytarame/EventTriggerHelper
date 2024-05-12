@@ -3,6 +3,7 @@ using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TriggerAPI;
 
@@ -24,9 +25,11 @@ public class Plugin : BasePlugin
     public override void Load()
     {     
         RegisterTriggerEvents.RegisterCustomEvent(new LogCustomEvent(), new List<string>(){"Messages to Log"});
+   
+        
         DefaultEventsCount = Enum.GetValues<DataManager.GameData.BeatmapData.EventTriggers.EventType>().Length;
         DefaultTriggersCount = Enum.GetValues<DataManager.GameData.BeatmapData.EventTriggers.TriggerType>().Length;
-        
+
         Inst = this;
         _harmony = new Harmony(Guid);
         _harmony.PatchAll();
