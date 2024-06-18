@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using HarmonyLib;
 using Il2CppInterop.Runtime;
-using Il2CppSystem;
 using static DataManager.GameData.BeatmapData.EventTriggers;
 
 namespace TriggerAPI.Patchers
@@ -9,13 +7,13 @@ namespace TriggerAPI.Patchers
     [HarmonyPatch(typeof(DataManager))]
     internal class SaveEventType
     {
-        static bool IsSaving = false;
+        static bool _isSaving;
         [HarmonyPatch(nameof(DataManager.SaveData))]
         [HarmonyPrefix]
-        //this saves the event type on a EventData, done so multiple mods don't overlap the enum ids of each other
+        //this saves the event type on a EventData entry, done so multiple mods don't overlap the enum ids of each other
         public static void PreSaveData()
         {
-            IsSaving = true;
+            _isSaving = true;
             foreach (var dataEntry in DataManager.inst.gameData.beatmapData.eventTriggers.triggers)
             {
                 if ((int)dataEntry.EventType >= Plugin.Inst.DefaultEventsCount)
@@ -40,9 +38,9 @@ namespace TriggerAPI.Patchers
             //removes the event type from event data, so it doesn't show up on the level editor
             public static void PostSaveData()
             {
-                if (!IsSaving) return;
+                if (!_isSaving) return;
 
-                IsSaving = false;
+                _isSaving = false;
                 
                 foreach (var dataEntry in DataManager.inst.gameData.beatmapData.eventTriggers.triggers)
                 {

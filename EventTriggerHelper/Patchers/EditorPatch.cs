@@ -42,7 +42,7 @@ namespace TriggerAPI.Patchers
 
                 if (trigger.EventData[0].Contains("(CustomTrigger)"))
                 {
-                    Plugin.Inst.Log.LogError(trigger.EventData[0].Substring(15));
+                    Plugin.Logger.LogError(trigger.EventData[0].Substring(15));
                     int triggerIndex = RegisterTriggerEvents.GetEventEnumFromName(trigger.EventData[0].Substring(15));
                     
                     trigger.EventTrigger =
@@ -54,7 +54,7 @@ namespace TriggerAPI.Patchers
                 }
                 if (trigger.EventData[0].Contains("(CustomEvent)"))
                 {
-                    Plugin.Inst.Log.LogError(trigger.EventData[0].Substring(13));
+                    Plugin.Logger.LogError(trigger.EventData[0].Substring(13));
                     int eventIndex = RegisterTriggerEvents.GetEventEnumFromName(trigger.EventData[0].Substring(13));
                     
                     trigger.EventType =

@@ -2,7 +2,6 @@
 using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
-using Il2CppSystem;
 using static DataManager.GameData.BeatmapData.EventTriggers;
 
 namespace TriggerAPI.Patchers
@@ -21,29 +20,27 @@ namespace TriggerAPI.Patchers
 
             Dictionary<string, object> newEvents = new Dictionary<string, object>();
             Dictionary<string, object> newTriggers = new Dictionary<string, object>();
-
+            
             if (RegisterTriggerEvents.ModdedEvents.Count != 0)
             {
-                var Enu = RegisterTriggerEvents.ModdedEvents.GetEnumerator();
-                while (Enu.MoveNext())
+                var eventEnu = RegisterTriggerEvents.ModdedEvents.GetEnumerator();
+                while (eventEnu.MoveNext())
                 {
-                    newEvents.Add(Enu.Current.Value.EventName, 99);
+                    newEvents.Add(eventEnu.Current.Value.EventName, 99);
                 }
-
-                Enu.Dispose();
+                eventEnu.Dispose();
 
                 EnumInjector.InjectEnumValues(typeof(EventType), newEvents);
             }
 
             if (RegisterTriggerEvents.ModdedTriggers.Count != 0)
             {
-                var Enu = RegisterTriggerEvents.ModdedTriggers.GetEnumerator();
-                while (Enu.MoveNext())
+                var triggerEnu = RegisterTriggerEvents.ModdedTriggers.GetEnumerator();
+                while (triggerEnu.MoveNext())
                 {
-                    newTriggers.Add(Enu.Current, 99);
+                    newTriggers.Add(triggerEnu.Current, 99);
                 }
-
-                Enu.Dispose();
+                triggerEnu.Dispose();
 
                 EnumInjector.InjectEnumValues(typeof(TriggerType), newTriggers);
             }
@@ -51,7 +48,7 @@ namespace TriggerAPI.Patchers
     }
 
 
-//so ideally we override EventTriggered, but the data parameter gives an exception when you try to access it for some reason.
+    //so ideally we override EventTriggered, but the data parameter gives an exception when you try to access it for some reason.
     //so CallEvent is the way
     [HarmonyPatch(typeof(GameManager))]
     internal class TriggerCustomEvent
@@ -74,12 +71,7 @@ namespace TriggerAPI.Patchers
                 // setup triggered state
                 else
                     __instance.hasTriggered.Add(_trigger.ID, 1);
-                
-                AudioManager.Inst.Start();
-                AudioManager.inst.Start();
             }
-
-            Plugin.Inst.Log.LogInfo($"Custom Event Triggered: {Il2CppType.Of<EventType>().GetEnumNames()[(int)_trigger.EventType]}"); 
             
             if(RegisterTriggerEvents.ModdedEvents.TryGetValue(Il2CppType.Of<EventType>().GetEnumNames()[(int)_trigger.EventType], out CustomEvent customEvent))
             {
@@ -87,7 +79,7 @@ namespace TriggerAPI.Patchers
             } 
             else
             {
-                Plugin.Inst.Log.LogError("Invalid Custom Event!");
+                Plugin.Logger.LogError("Invalid Custom Event!");
             }
 
             return false;
@@ -96,7 +88,6 @@ namespace TriggerAPI.Patchers
         [HarmonyPrefix]
         public static bool CallPre(ref GameManager __instance, ref Trigger _trigger)
         {
-            
             float startTime = _trigger.EventTriggerTime.x;
             float endTime = _trigger.EventTriggerTime.y;
 

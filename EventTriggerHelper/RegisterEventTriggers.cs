@@ -9,10 +9,17 @@ namespace TriggerAPI
     /// </summary>
     public static class RegisterTriggerEvents
     {
+        
         internal static Dictionary<string, CustomEvent> ModdedEvents { get; private set; }
         internal static Dictionary<string, List<string>> EventsData{ get; private set; }
         internal static List<string> ModdedTriggers{ get; private set; }
-        
+
+        internal static void Init()
+        {
+            ModdedEvents = new Dictionary<string, CustomEvent>();
+            EventsData = new Dictionary<string, List<string>>();
+            ModdedTriggers = new List<string>();
+        }
 
 /// <summary>
 /// <param name="customEvent">Pass in an instance of a class that inherits from the abstract class CustomEvent</param>
@@ -22,12 +29,6 @@ namespace TriggerAPI
 /// </summary>
         public static bool RegisterCustomEvent(CustomEvent customEvent, List<string> eventData = null)
         {
-            if (ModdedEvents == null)
-            {
-                ModdedEvents = new Dictionary<string, CustomEvent>();
-                EventsData = new Dictionary<string, List<string>>();
-            }
-            
             if(eventData != null)
                 EventsData.TryAdd(customEvent.EventName, eventData);
             else
@@ -43,14 +44,9 @@ namespace TriggerAPI
         /// </summary>
         public static bool RegisterCustomTrigger(string triggerName)
         {
-            if (ModdedTriggers == null)
-            {
-                ModdedTriggers = new List<string>();
-            }
-
             if (ModdedTriggers.Contains(triggerName))
             {
-                Plugin.Inst.Log.LogError($"Trigger [{triggerName}] already exists!");
+                Plugin.Logger.LogError($"Trigger [{triggerName}] already exists!");
                 return false;
             }
             
@@ -76,7 +72,7 @@ namespace TriggerAPI
     {
         /// <summary>
         /// <para>The Name of your Event, it's also the name of the Enum entry.</para>
-        /// The name Should follow Enum naming rules, such as no spaces or not starting with a number
+        /// The name Should follow Enum naming rules, such as no spaces and not starting with a number
         /// <example> Spawn_Prefab </example>
         /// </summary>
         public abstract string EventName { get; }
