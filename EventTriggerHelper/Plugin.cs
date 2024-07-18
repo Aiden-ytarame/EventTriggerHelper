@@ -28,7 +28,7 @@ public class Plugin : BasePlugin
     {     
         RegisterTriggerEvents.Init();
         RegisterTriggerEvents.RegisterCustomEvent(new LogCustomEvent(), new List<string>(){"Messages to Log"});
-        
+        RegisterTriggerEvents.RegisterCustomTrigger("NULL");
         DefaultEventsCount = Enum.GetValues<DataManager.GameData.BeatmapData.EventTriggers.EventType>().Length;
         DefaultTriggersCount = Enum.GetValues<DataManager.GameData.BeatmapData.EventTriggers.TriggerType>().Length;
 

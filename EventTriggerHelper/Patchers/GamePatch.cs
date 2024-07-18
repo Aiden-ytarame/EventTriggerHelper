@@ -8,14 +8,16 @@ namespace TriggerAPI.Patchers
     [HarmonyPatch(typeof(TriggerDialog))]
     internal class SetupEventDataOnEditor
     {
+        /// <summary>
+        /// adds custom triggers to the editor UI
+        /// </summary>
         [HarmonyPatch(nameof(TriggerDialog.OnStart))]
         [HarmonyPostfix]
         public static void StartTriggersPost()
         {
             foreach (var keyValuePair in RegisterTriggerEvents.EventsData)
             {
-                Il2CppSystem.Collections.Generic.List<string> newData =
-                    new Il2CppSystem.Collections.Generic.List<string>();
+                Il2CppSystem.Collections.Generic.List<string> newData = new();
                 keyValuePair.Value.ForEach(x =>
                 {
                     newData.Add(x);
@@ -30,6 +32,9 @@ namespace TriggerAPI.Patchers
     [HarmonyPatch(typeof(GameManager))]
     internal class SetupEventTypes
     {
+        /// <summary>
+        /// loads the triggers and events
+        /// </summary>
         [HarmonyPatch(nameof(GameManager.PlayGame))]
         [HarmonyPrefix]
         public static void PrePlay()
@@ -43,12 +48,12 @@ namespace TriggerAPI.Patchers
                 if (trigger.EventData[0].Contains("(CustomTrigger)"))
                 {
                     Plugin.Logger.LogError(trigger.EventData[0].Substring(15));
-                    int triggerIndex = RegisterTriggerEvents.GetEventEnumFromName(trigger.EventData[0].Substring(15));
+                    var triggerIndex = RegisterTriggerEvents.GetTriggerEnumFromName(trigger.EventData[0].Substring(15));
                     
                     trigger.EventTrigger =
                         triggerIndex != -1
                             ? (TriggerType)triggerIndex
-                            : TriggerType.Time; //if custom trigger is not registered, default to Time
+                            : (TriggerType)Plugin.Inst.DefaultTriggersCount; //if custom trigger is not registered, default to NULL
                     
                     trigger.EventData.RemoveAt(0);
                 }

@@ -8,9 +8,12 @@ namespace TriggerAPI.Patchers
     internal class SaveEventType
     {
         static bool _isSaving;
+        
+        /// <summary>
+        /// this saves the event type name on a EventData entry, done so multiple mods don't overlap the enum ids of each other
+        /// </summary>
         [HarmonyPatch(nameof(DataManager.SaveData))]
         [HarmonyPrefix]
-        //this saves the event type on a EventData entry, done so multiple mods don't overlap the enum ids of each other
         public static void PreSaveData()
         {
             _isSaving = true;

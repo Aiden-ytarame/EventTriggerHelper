@@ -9,18 +9,34 @@ namespace TriggerAPI
     /// </summary>
     public static class RegisterTriggerEvents
     {
-        
         internal static Dictionary<string, CustomEvent> ModdedEvents { get; private set; }
-        internal static Dictionary<string, List<string>> EventsData{ get; private set; }
         internal static List<string> ModdedTriggers{ get; private set; }
+        internal static Dictionary<string, List<DataManager.GameData.BeatmapData.EventTriggers.Trigger>> Triggers{ get; private set; }
+        internal static Dictionary<string, List<string>> EventsData{ get; private set; }
 
+        
         internal static void Init()
         {
-            ModdedEvents = new Dictionary<string, CustomEvent>();
-            EventsData = new Dictionary<string, List<string>>();
-            ModdedTriggers = new List<string>();
+            ModdedEvents = new();
+            EventsData = new();
+            ModdedTriggers = new();
+            Triggers = new();
         }
 
+        /// <summary>
+        /// Calls all events bound to a trigger if they're on time range
+        /// </summary>
+        /// <param name="triggerName">Name of the Custom Trigger to trigger</param>
+        public static void CallCustomTrigger(string triggerName)
+        {
+            if (Triggers.TryGetValue(triggerName, out var triggers))
+            {
+                foreach (var trigger in triggers)
+                {
+                   GameManager.Inst.CallEvent(trigger); 
+                }
+            }
+        }
 /// <summary>
 /// <param name="customEvent">Pass in an instance of a class that inherits from the abstract class CustomEvent</param>
 /// <param name="eventData">The Event Data field names that show up in the Level Editor</param>

@@ -9,6 +9,9 @@ namespace TriggerAPI.Patchers
     [HarmonyPatch(typeof(GameManager))]
     internal class StartTriggers
     {
+        /// <summary>
+        /// where the modded enums are injected
+        /// </summary>
         [HarmonyPatch(nameof(GameManager.Start))]
         [HarmonyPrefix]
         static void StartTriggersPre()
@@ -20,31 +23,49 @@ namespace TriggerAPI.Patchers
 
             Dictionary<string, object> newEvents = new Dictionary<string, object>();
             Dictionary<string, object> newTriggers = new Dictionary<string, object>();
-            
-            if (RegisterTriggerEvents.ModdedEvents.Count != 0)
-            {
-                var eventEnu = RegisterTriggerEvents.ModdedEvents.GetEnumerator();
-                while (eventEnu.MoveNext())
-                {
-                    newEvents.Add(eventEnu.Current.Value.EventName, 99);
-                }
-                eventEnu.Dispose();
 
-                EnumInjector.InjectEnumValues(typeof(EventType), newEvents);
+            foreach (var keyValuePair in RegisterTriggerEvents.ModdedEvents)
+            {
+                newEvents.Add(keyValuePair.Key, 99);
+            }
+            
+            EnumInjector.InjectEnumValues(typeof(EventType), newEvents);
+            
+            
+            foreach (var triggerString in RegisterTriggerEvents.ModdedTriggers)
+            {
+                newTriggers.Add(triggerString, 99);
             }
 
-            if (RegisterTriggerEvents.ModdedTriggers.Count != 0)
-            {
-                var triggerEnu = RegisterTriggerEvents.ModdedTriggers.GetEnumerator();
-                while (triggerEnu.MoveNext())
-                {
-                    newTriggers.Add(triggerEnu.Current, 99);
-                }
-                triggerEnu.Dispose();
+            EnumInjector.InjectEnumValues(typeof(TriggerType), newTriggers);
 
-                EnumInjector.InjectEnumValues(typeof(TriggerType), newTriggers);
+        }
+
+        /// <summary>
+        /// gets all triggers that use a custom trigger type and put them in a dictionary with the respective custom trigger
+        /// </summary>
+        [HarmonyPatch(nameof(GameManager.PlayGame))]
+        [HarmonyPostfix]
+        static void PostPlay()
+        {
+            RegisterTriggerEvents.Triggers.Clear();
+            //handle trigger callbacks
+            foreach (var triggerString in RegisterTriggerEvents.ModdedTriggers)
+            {
+                RegisterTriggerEvents.Triggers.TryAdd(triggerString, new List<Trigger>());
+
+                var list = RegisterTriggerEvents.Triggers[triggerString];
+                var type = (TriggerType)RegisterTriggerEvents.GetTriggerEnumFromName(triggerString);
+                
+                foreach (var trigger in DataManager.inst.gameData.beatmapData.eventTriggers.triggers)
+                {
+                    if (type == trigger.EventTrigger)
+                        list.Add(trigger);
+                }
+
             }
         }
+        
     }
 
 
@@ -84,6 +105,7 @@ namespace TriggerAPI.Patchers
 
             return false;
         }
+        //needed?
         [HarmonyPatch(nameof(GameManager.CallEvent))]
         [HarmonyPrefix]
         public static bool CallPre(ref GameManager __instance, ref Trigger _trigger)
