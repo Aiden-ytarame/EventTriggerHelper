@@ -36,7 +36,7 @@ namespace TriggerAPI.Patchers
         [HarmonyPatch(typeof(VGFunctions.LSFile))]
         internal class SaveEventTypeCoroutine
         {
-            [HarmonyPatch(nameof(VGFunctions.LSFile.WriteToFile))]
+            [HarmonyPatch(nameof(VGFunctions.LSFile.WriteToFileEnum))]
             [HarmonyPostfix]
             //removes the event type from event data, so it doesn't show up on the level editor
             public static void PostSaveData()

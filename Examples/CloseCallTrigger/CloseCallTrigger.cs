@@ -2,11 +2,8 @@ using System;
 using HarmonyLib;
 using TriggerAPI;
 using UnityEngine;
-using static DataManager.GameData.BeatmapData.EventTriggers;
 
 namespace CloseCallTrigger;
-
-
 
 [HarmonyPatch(typeof(GameManager))]
 public class GameManager_Patch
