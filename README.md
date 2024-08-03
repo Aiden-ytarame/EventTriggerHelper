@@ -8,7 +8,7 @@ The main point of this is to make sure there isnt any problems when using multip
 
 If you're using a mod that makes a new event that doesnt use this mod, it might break some things.
 
-Its meant to be used with BepInEx 6.0.0 il2cpp bleeding Edge build, tho I didnt test if the non bleeding edge build works.
+Used with BepInEx 6.X.X il2cpp win64 bleeding Edge build (most recent build)
 
 I dont think anyone will ever use this tbh
 
@@ -43,22 +43,22 @@ Example: Spawn_Prefab
 
 ### Registering a new CustomEvent
 
-To register your custom Event call, **TriggerAPI.RegisterTriggerEvents.RegisterCustomEvent()** from your **Plugin.Load()** function.
+To register your custom Event call, **TriggerAPI.RegisterTriggerEvents.RegisterCustomEvent(CustomEvent, List<string>)** from your **Plugin.Load()** function.
 
 #### Params
 
 * **customEvent:** Pass in an instance of a class that inherits from the abstract class CustomEvent.
-*  **eventData:** Its the Event Data field names that show up in the Level Editor.
+* **eventData:** Its the Event Data field names that show up in the Level Editor.
   
 Example: RegisterCustomEvent(new ExampleLogEvent(), new List{string}(){"Message to Log"});
 
 ### Making a new Trigger
 
-Triggers work by calling GameManager2.CallEvent(Trigger) pretty much when they want to. the function is called for every trigger using the TriggerType of the custom trigger.
+Triggers work by calling **TriggerAPI.RegisterTriggerEvents.CallCustomTrigger(string)** pretty much when they want to. this function calls GameManager.CallEvent() for each event bound to your trigger
 
-example:
-
-* Player_Moved CustomTrigger (check IsPlayerMovingTrigger.cs in examples folder) checks every frame for the players velocity. If the velocity just got out of zero it goes trough a list of TriggerEvents that use the Player_Moved trigger and calls GameManager2.CallEvent(Trigger) for each one.
+* **triggerName:** name of the trigger to be triggered.
+  
+example: CallCustomTrigger("Player_Moved");
 
 
 ### Registering a new Trigger
@@ -70,8 +70,10 @@ Example: RegisterCustomTrigger("Player_Moved");
 
 **Note:** The name of your Trigger, is also the the Enum entry. Because of that, the name should follow the rules of naming variables, such as no spaces or not starting with a number.
 
+Theres example triggers and events in this repository as well.
 
 ## Usage
 
 Just have this with any other mods that uses this mod to register their Events. you should be able to use their events without any overlap issues.
+
 
