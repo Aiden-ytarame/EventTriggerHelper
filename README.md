@@ -18,7 +18,7 @@ I dont think anyone will ever use this tbh
 
 * Download the [BepInEx 6.0.0 il2cpp bleeding Edge build.](https://builds.bepinex.dev/projects/bepinex_be)
 * Follow the BepInEx installation guide available on their [Github](https://github.com/BepInEx/BepInEx).
-* Put the TriggersAPI.dll file in the generated BepInNex->Plugins folder.
+* Put the TriggersAPI.dll file in the generated BepInEx->Plugins folder.
 
 
 ## Development
